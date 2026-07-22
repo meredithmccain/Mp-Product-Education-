@@ -6,60 +6,477 @@
 <title>Manhattan Project Tap List Guide</title>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, "Helvetica Neue", sans-serif; margin: 0; background: #fafafa; color: #111; -webkit-font-smoothing: antialiased; }
-  header { padding: 22px 16px 16px; background: #111; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 10; }
-  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+
+  :root {
+    --black: #111;
+    --charcoal: #1b1b1b;
+    --cream: #f7f3ea;
+    --paper: #fffdf8;
+    --muted: #777;
+    --line: #e8e2d7;
+    --green: #e9f5ec;
+    --green-text: #1e7a3d;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    margin: 0;
+    background: var(--cream);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    padding: 20px 16px 14px;
+    background: var(--black);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow: 0 4px 18px rgba(0,0,0,.18);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
   .brand svg { flex-shrink: 0; }
-  .brand-text h1 { font-size: 17px; font-weight: 700; margin: 0; color: #fff; letter-spacing: 0.02em; }
-  .brand-text p { font-size: 10px; font-weight: 500; margin: 2px 0 0; color: #999; letter-spacing: 0.12em; }
-  input[type="text"] { width: 100%; padding: 11px 14px; border: 1px solid #333; border-radius: 10px; font-size: 14px; background: #1c1c1c; color: #fff; outline: none; transition: border-color 0.15s; }
+
+  .brand-text h1 {
+    font-size: 17px;
+    font-weight: 750;
+    margin: 0;
+    color: #fff;
+    letter-spacing: .03em;
+  }
+
+  .brand-text p {
+    font-size: 10px;
+    font-weight: 600;
+    margin: 2px 0 0;
+    color: #999;
+    letter-spacing: .14em;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #333;
+    border-radius: 12px;
+    font-size: 14px;
+    background: var(--charcoal);
+    color: #fff;
+    outline: none;
+  }
+
   input[type="text"]::placeholder { color: #777; }
   input[type="text"]:focus { border-color: #fff; }
-  .tabs { display: flex; gap: 6px; margin-top: 12px; overflow-x: auto; padding-bottom: 2px; }
-  .tab { padding: 7px 14px; border-radius: 999px; border: 1px solid #333; font-size: 12.5px; font-weight: 500; white-space: nowrap; cursor: pointer; color: #ccc; transition: all 0.15s; }
-  .tab.active { background: #fff; color: #111; border-color: #fff; }
-  .list { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-  .card { background: #fff; border: 1px solid #ececec; border-radius: 14px; padding: 14px 16px; transition: border-color 0.15s; }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .name { font-weight: 600; font-size: 15px; margin: 0 0 3px; letter-spacing: -0.01em; }
-  .desc { font-size: 12.5px; color: #777; margin: 0; line-height: 1.45; }
-  .abv { font-size: 11px; font-weight: 600; background: #111; color: #fff; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
-  .tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-  .tag { font-size: 10.5px; font-weight: 500; background: #f2f2f2; color: #555; padding: 4px 9px; border-radius: 6px; }
-  .tag.gf { background: #e9f5ec; color: #1e7a3d; }
-  .tag.new { background: #111; color: #fff; }
-  .empty { text-align: center; color: #999; padding: 60px 16px; font-size: 13.5px; }
-  .game-card { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 28px 18px; margin: 14px; text-align: center; }
-  .game-question { font-size: 14.5px; color: #222; margin-bottom: 22px; line-height: 1.6; }
-  .game-options { display: flex; flex-direction: column; gap: 8px; }
-  .game-option { padding: 13px 14px; border: 1px solid #e0e0e0; border-radius: 11px; background: #fff; font-size: 13.5px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.15s; }
-  .game-option:hover { border-color: #bbb; }
+
+  .tabs {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #333;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #ccc;
+    transition: .15s ease;
+  }
+
+  .tab.active {
+    background: #fff;
+    color: var(--black);
+    border-color: #fff;
+  }
+
+  .filter-wrap {
+    padding: 12px 14px 0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    border: 1px solid #d7d0c5;
+    background: var(--paper);
+    color: #555;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .filter-btn.active {
+    background: var(--black);
+    border-color: var(--black);
+    color: #fff;
+  }
+
+  .status {
+    text-align: center;
+    padding: 60px 18px;
+    color: #888;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .status strong {
+    display: block;
+    color: #333;
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+
+  .list {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 15px 16px;
+    cursor: pointer;
+    transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-1px);
+    border-color: #cfc6b8;
+    box-shadow: 0 8px 20px rgba(0,0,0,.05);
+  }
+
+  .tap-layout {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 13px;
+    align-items: start;
+  }
+
+  .tap-number {
+    width: 58px;
+    min-height: 58px;
+    border-radius: 14px;
+    background: var(--black);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .tap-number small {
+    font-size: 9px;
+    letter-spacing: .12em;
+    color: #aaa;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tap-number strong {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .name {
+    font-weight: 750;
+    font-size: 16px;
+    margin: 0 0 4px;
+    letter-spacing: -.01em;
+  }
+
+  .desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .abv {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--black);
+    color: #fff;
+    padding: 5px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 11px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 10.5px;
+    font-weight: 650;
+    background: #f0ece5;
+    color: #555;
+    padding: 5px 9px;
+    border-radius: 7px;
+  }
+
+  .tag.gf { background: var(--green); color: var(--green-text); }
+  .tag.new { background: var(--black); color: #fff; }
+
+  .details-hint {
+    font-size: 10.5px;
+    color: #aaa;
+    margin-top: 10px;
+  }
+
+  .new-banner {
+    margin: 14px 14px 0;
+    background: var(--black);
+    border-radius: 16px;
+    padding: 17px;
+    color: #fff;
+  }
+
+  .new-banner-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: #999;
+    margin: 0 0 6px;
+  }
+
+  .new-banner-name {
+    font-size: 17px;
+    font-weight: 750;
+    margin: 0 0 4px;
+  }
+
+  .new-banner-desc {
+    font-size: 12px;
+    color: #bbb;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .new-banner-dots {
+    display: flex;
+    gap: 5px;
+    margin-top: 11px;
+  }
+
+  .new-banner-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #444;
+  }
+
+  .new-banner-dot.active { background: #fff; }
+
+  .game-card, .flash-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px 18px;
+    margin: 14px;
+    text-align: center;
+  }
+
+  .game-question {
+    font-size: 14.5px;
+    color: #222;
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+
+  .game-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .game-option {
+    padding: 13px 14px;
+    border: 1px solid #ddd6cc;
+    border-radius: 11px;
+    background: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+  }
+
   .game-option.correct { background: #e9f5ec; border-color: #1e7a3d; color: #1e7a3d; }
   .game-option.wrong { background: #fbeaea; border-color: #b33; color: #b33; }
-  .game-next { margin-top: 18px; padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 999px; font-size: 13.5px; font-weight: 500; cursor: pointer; }
-  .game-next:hover { background: #333; }
-  .game-score { text-align: center; font-size: 12px; color: #999; margin: 10px 16px 0; font-weight: 500; }
-  .flash-card { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 36px 18px; margin: 14px; text-align: center; min-height: 140px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: border-color 0.15s; }
-  .flash-card:hover { border-color: #ccc; }
-  .flash-nav { display: flex; justify-content: space-between; padding: 0 16px; margin-top: 12px; }
-  .flash-nav button { padding: 9px 18px; border: 1px solid #e0e0e0; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s; }
-  .flash-nav button:hover { border-color: #111; }
-  .flash-count { text-align: center; font-size: 11.5px; color: #999; margin-top: 10px; font-weight: 500; }
-  .new-banner { margin: 14px 14px 0; background: #111; border-radius: 14px; padding: 16px; color: #fff; position: relative; overflow: hidden; min-height: 76px; }
-  .new-banner-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #999; margin: 0 0 6px; }
-  .new-banner-name { font-size: 16px; font-weight: 600; margin: 0 0 3px; }
-  .new-banner-desc { font-size: 12px; color: #bbb; margin: 0; line-height: 1.4; }
-  .new-banner-dots { display: flex; gap: 5px; margin-top: 10px; }
-  .new-banner-dot { width: 5px; height: 5px; border-radius: 50%; background: #444; }
-  .new-banner-dot.active { background: #fff; }
+
+  .game-next {
+    margin-top: 18px;
+    padding: 11px 22px;
+    background: var(--black);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .game-score, .flash-count {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    margin: 10px 16px 0;
+    font-weight: 600;
+  }
+
+  .flash-card {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .flash-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    margin-top: 12px;
+  }
+
+  .flash-nav button {
+    padding: 9px 18px;
+    border: 1px solid #ddd6cc;
+    border-radius: 999px;
+    background: var(--paper);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.62);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    padding: 0;
+  }
+
+  .modal-backdrop.show { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    border-radius: 22px 22px 0 0;
+    padding: 22px 18px 28px;
+    box-shadow: 0 -16px 40px rgba(0,0,0,.25);
+  }
+
+  .modal-handle {
+    width: 42px;
+    height: 5px;
+    background: #d7d0c5;
+    border-radius: 999px;
+    margin: -6px auto 17px;
+  }
+
+  .modal-close {
+    float: right;
+    border: none;
+    background: #eee9e1;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    margin: 4px 44px 5px 0;
+    letter-spacing: -.02em;
+  }
+
+  .modal-style {
+    margin: 0 0 16px;
+    color: #777;
+    font-size: 13px;
+  }
+
+  .detail-section {
+    border-top: 1px solid var(--line);
+    padding-top: 15px;
+    margin-top: 15px;
+  }
+
+  .detail-label {
+    margin: 0 0 6px;
+    font-size: 10px;
+    letter-spacing: .12em;
+    font-weight: 800;
+    color: #999;
+    text-transform: uppercase;
+  }
+
+  .detail-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #333;
+    white-space: pre-wrap;
+  }
+
+  @media (min-width: 700px) {
+    .list, .filter-wrap { max-width: 760px; margin-left: auto; margin-right: auto; }
+    .new-banner { max-width: 732px; margin-left: auto; margin-right: auto; }
+    .modal-backdrop { align-items: center; padding: 24px; }
+    .modal { border-radius: 22px; }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="brand">
-    <svg width="34" height="34" viewBox="0 0 100 100">
-      <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(0 50 50)"/>
+    <svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true">
+      <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3"/>
       <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(60 50 50)"/>
       <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(120 50 50)"/>
       <rect x="43" y="32" width="14" height="40" rx="2" fill="#fff"/>
@@ -71,10 +488,12 @@
       <p>BEER COMPANY</p>
     </div>
   </div>
-  <input type="text" id="search" placeholder="Search beer or food item">
+
+  <input type="text" id="search" placeholder="Search beer, style, or flavor">
+
   <div class="tabs">
-    <div class="tab active" data-type="beer">Beers</div>
-    <div class="tab" data-type="ontap">On Tap</div>
+    <div class="tab active" data-type="ontap">On Tap</div>
+    <div class="tab" data-type="beer">All Beers</div>
     <div class="tab" data-type="food">Food</div>
     <div class="tab" data-type="flash">Flashcards</div>
     <div class="tab" data-type="quiz">Quiz</div>
@@ -82,7 +501,30 @@
   </div>
 </header>
 
-<div id="content"></div>
+<div id="filterWrap" class="filter-wrap">
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="light">Light & Crisp</button>
+    <button class="filter-btn" data-filter="hoppy">Hoppy</button>
+    <button class="filter-btn" data-filter="dark">Dark & Roasty</button>
+    <button class="filter-btn" data-filter="fruity">Fruity / Sour</button>
+    <button class="filter-btn" data-filter="highabv">High ABV</button>
+    <button class="filter-btn" data-filter="gf">Gluten-Reduced</button>
+    <button class="filter-btn" data-filter="new">New Taps</button>
+  </div>
+</div>
+
+<div id="content">
+  <div class="status"><strong>Loading beer list…</strong>Please wait a moment.</div>
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
 
 <script>
 const BEER_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfvDNoqxHQCc7PBCm-xetbdDiAfyfi3ECVbnRAfoCYJmdfSxFuamdGJ6THg97ErXp3hFCLG1IBcZsH/pub?gid=0&single=true&output=csv";
@@ -90,7 +532,8 @@ const FOOD_CSV_URL = "PASTE_YOUR_FOOD_CSV_LINK_HERE";
 
 let beers = [];
 let foods = [];
-let activeType = "beer";
+let activeType = "ontap";
+let activeFilter = "all";
 let flashIndex = 0;
 let flashFlipped = false;
 let quizItem = null;
@@ -102,62 +545,193 @@ let newTapTimer = null;
 
 function parseCSV(text) {
   const rows = [];
-  let row = [], field = '', inQuotes = false;
+  let row = [], field = "", inQuotes = false;
+
   for (let i = 0; i < text.length; i++) {
     const c = text[i], next = text[i + 1];
+
     if (inQuotes) {
-      if (c === '"' && next === '"') { field += '"'; i++; }
-      else if (c === '"') { inQuotes = false; }
-      else { field += c; }
+      if (c === '"' && next === '"') {
+        field += '"';
+        i++;
+      } else if (c === '"') {
+        inQuotes = false;
+      } else {
+        field += c;
+      }
     } else {
       if (c === '"') inQuotes = true;
-      else if (c === ',') { row.push(field); field = ''; }
-      else if (c === '\n' || c === '\r') {
-        if (field !== '' || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
-      } else { field += c; }
+      else if (c === ",") {
+        row.push(field);
+        field = "";
+      } else if (c === "\n" || c === "\r") {
+        if (field !== "" || row.length) {
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = "";
+        }
+      } else {
+        field += c;
+      }
     }
   }
-  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+
+  if (field !== "" || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  if (!rows.length) return [];
+
   const headers = rows[0].map(h => h.trim());
+
   return rows.slice(1).filter(r => r.length > 1).map(r => {
     const obj = {};
-    headers.forEach((h, i) => obj[h] = (r[i] || "").trim());
+    headers.forEach((h, i) => {
+      obj[h] = (r[i] || "").trim();
+    });
     return obj;
   });
 }
 
 async function loadData() {
-  const beerText = await fetch(BEER_CSV_URL).then(r => r.text());
-  beers = parseCSV(beerText);
-  beers = beers.filter(b => b.Name && b.Name.trim() !== "" && b.Name !== "?");
+  const content = document.getElementById("content");
 
-  if (FOOD_CSV_URL !== "PASTE_YOUR_FOOD_CSV_LINK_HERE") {
-    const foodText = await fetch(FOOD_CSV_URL).then(r => r.text());
-    foods = parseCSV(foodText);
+  try {
+    const beerResponse = await fetch(BEER_CSV_URL, { cache: "no-store" });
+
+    if (!beerResponse.ok) {
+      throw new Error("Beer spreadsheet returned " + beerResponse.status);
+    }
+
+    const beerText = await beerResponse.text();
+    beers = parseCSV(beerText).filter(b =>
+      b.Name &&
+      b.Name.trim() !== "" &&
+      b.Name.trim() !== "?"
+    );
+
+    if (FOOD_CSV_URL !== "PASTE_YOUR_FOOD_CSV_LINK_HERE") {
+      try {
+        const foodResponse = await fetch(FOOD_CSV_URL, { cache: "no-store" });
+        if (foodResponse.ok) {
+          foods = parseCSV(await foodResponse.text());
+        }
+      } catch (foodError) {
+        console.warn("Food data could not be loaded:", foodError);
+      }
+    }
+
+    render();
+    startNewTapRotation();
+  } catch (error) {
+    console.error(error);
+    content.innerHTML = `
+      <div class="status">
+        <strong>The beer list could not be loaded.</strong>
+        Make sure the Google Sheet is still published to the web, then refresh the page.
+      </div>
+    `;
   }
-  render();
-  startNewTapRotation();
+}
+
+function getFlavorProfile(item) {
+  return (
+    item["Flavor Profile"] ||
+    item["Flavor Prodfile"] ||
+    item["Flavor profile"] ||
+    item["flavor profile"] ||
+    ""
+  );
 }
 
 function getDesc(item) {
-  return item["Description / ingredients"] || item["Flavor Prodfile"] || "";
+  return item["Description / ingredients"] || getFlavorProfile(item) || "";
 }
 
 function isYes(val) {
   return (val || "").toLowerCase().trim().startsWith("yes");
 }
 
+function getTapNumber(item) {
+  const match = (item["On Tap"] || "").match(/\d+/);
+  return match ? match[0] : "";
+}
+
+function getABVNumber(item) {
+  const value = String(item.abv || item.ABV || "").replace("%", "");
+  const number = parseFloat(value);
+  return Number.isNaN(number) ? 0 : number;
+}
+
+function getSearchText(item) {
+  return [
+    item.Name,
+    item.Style,
+    getDesc(item),
+    getFlavorProfile(item),
+    item["Guest Guidance"]
+  ].join(" ").toLowerCase();
+}
+
+function matchesFilter(item) {
+  if (activeFilter === "all") return true;
+
+  const text = getSearchText(item);
+
+  if (activeFilter === "light") {
+    return /(light|crisp|clean|lager|pils|pilsner|kolsch|kölsch|blonde|helles|rice lager)/i.test(text);
+  }
+
+  if (activeFilter === "hoppy") {
+    return /(hoppy|hop|ipa|pale ale|dipa|double ipa|west coast|haz(y|e))/i.test(text);
+  }
+
+  if (activeFilter === "dark") {
+    return /(dark|roast|roasty|stout|porter|coffee|chocolate|brown ale|schwarz)/i.test(text);
+  }
+
+  if (activeFilter === "fruity") {
+    return /(fruit|fruity|berry|citrus|tropical|peach|mango|cherry|sour|tart|gose|berliner|smoothie)/i.test(text);
+  }
+
+  if (activeFilter === "highabv") {
+    return getABVNumber(item) >= 8;
+  }
+
+  if (activeFilter === "gf") {
+    return isYes(item["Gluten-Reduced"]);
+  }
+
+  if (activeFilter === "new") {
+    return isYes(item["New Tap"]);
+  }
+
+  return true;
+}
+
 function shuffle(arr) {
   const a = arr.slice();
+
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
+
   return a;
 }
 
 function render() {
   const content = document.getElementById("content");
+  const filterWrap = document.getElementById("filterWrap");
+
+  const showFilters =
+    activeType === "beer" ||
+    activeType === "ontap";
+
+  filterWrap.style.display = showFilters ? "block" : "none";
+
   if (activeType === "beer" || activeType === "food" || activeType === "ontap") {
     renderList(content);
   } else if (activeType === "flash") {
@@ -170,18 +744,29 @@ function render() {
 }
 
 function renderNewTapBanner() {
-  const newBeers = beers.filter(b => isYes(b["New Tap"]));
+  const newBeers = beers.filter(b =>
+    isYes(b["New Tap"]) &&
+    isYes(b["On Tap"])
+  );
+
   if (newBeers.length === 0) return "";
+
   if (newTapIndex >= newBeers.length) newTapIndex = 0;
+
   const b = newBeers[newTapIndex];
-  const desc = getDesc(b).slice(0, 90);
+  const desc = getDesc(b).slice(0, 105);
+
   return `
-    <div class="new-banner">
+    <div class="new-banner" onclick="openBeerByName('${escapeForAttribute(b.Name)}')" style="cursor:pointer;">
       <p class="new-banner-label">NEWLY TAPPED</p>
-      <p class="new-banner-name">${b.Name}</p>
-      <p class="new-banner-desc">${b.Style || ""}${desc ? " — " + desc : ""}</p>
+      <p class="new-banner-name">${escapeHTML(b.Name)}</p>
+      <p class="new-banner-desc">
+        ${escapeHTML(b.Style || "")}${desc ? " — " + escapeHTML(desc) : ""}
+      </p>
       <div class="new-banner-dots">
-        ${newBeers.map((_, i) => `<div class="new-banner-dot${i === newTapIndex ? ' active' : ''}"></div>`).join("")}
+        ${newBeers.map((_, i) =>
+          `<div class="new-banner-dot${i === newTapIndex ? " active" : ""}"></div>`
+        ).join("")}
       </div>
     </div>
   `;
@@ -189,176 +774,384 @@ function renderNewTapBanner() {
 
 function startNewTapRotation() {
   if (newTapTimer) clearInterval(newTapTimer);
+
   newTapTimer = setInterval(() => {
-    const newBeers = beers.filter(b => isYes(b["New Tap"]));
+    const newBeers = beers.filter(b =>
+      isYes(b["New Tap"]) &&
+      isYes(b["On Tap"])
+    );
+
     if (newBeers.length === 0) return;
+
     newTapIndex = (newTapIndex + 1) % newBeers.length;
-    if (activeType === "beer" || activeType === "ontap") render();
-  }, 4000);
+
+    if (activeType === "beer" || activeType === "ontap") {
+      render();
+    }
+  }, 4500);
 }
 
 function renderList(content) {
-  const query = document.getElementById("search").value.toLowerCase();
+  const query = document.getElementById("search").value.toLowerCase().trim();
   let source = activeType === "food" ? foods : beers;
+
   if (activeType === "ontap") {
     source = source
       .filter(b => isYes(b["On Tap"]))
       .sort((a, b) => {
-        const matchA = (a["On Tap"] || "").match(/\d+/);
-        const matchB = (b["On Tap"] || "").match(/\d+/);
-        const tapA = matchA ? Number(matchA[0]) : 999;
-        const tapB = matchB ? Number(matchB[0]) : 999;
+        const tapA = Number(getTapNumber(a) || 999);
+        const tapB = Number(getTapNumber(b) || 999);
         return tapA - tapB;
       });
   }
-  const filtered = source.filter(item =>
-    (item.Name || "").toLowerCase().includes(query) ||
-    (item.Style || "").toLowerCase().includes(query)
-  );
 
-  const banner = (activeType === "beer" || activeType === "ontap") ? renderNewTapBanner() : "";
+  const filtered = source.filter(item => {
+    const matchesSearch =
+      !query ||
+      getSearchText(item).includes(query);
+
+    const matchesActiveFilter =
+      activeType === "food" ||
+      matchesFilter(item);
+
+    return matchesSearch && matchesActiveFilter;
+  });
+
+  const banner =
+    activeType === "ontap"
+      ? renderNewTapBanner()
+      : "";
 
   if (filtered.length === 0) {
-    content.innerHTML = banner + '<div class="empty">Nothing matches yet.</div>';
+    const message =
+      activeType === "ontap" && source.length === 0
+        ? "No beers are currently marked as On Tap. Check the On Tap column in your spreadsheet."
+        : "Nothing matches your search or selected filter.";
+
+    content.innerHTML = banner + `
+      <div class="status">
+        <strong>Nothing to show yet.</strong>
+        ${message}
+      </div>
+    `;
     return;
   }
-  content.innerHTML = banner + '<div class="list">' + filtered.map(item => {
-    const desc = getDesc(item);
-    const abv = item.abv ? item.abv + "%" : "";
-    const gf = isYes(item["Gluten-Reduced"]);
-    const isNew = isYes(item["New Tap"]);
-    const guidance = item["Guest Guidance"] || "";
-    const tapNumberMatch = (item["On Tap"] || "").match(/\d+/);
-    const tapNumber = tapNumberMatch ? tapNumberMatch[0] : "";
 
+  content.innerHTML =
+    banner +
+    '<div class="list">' +
+    filtered.map(item => renderBeerCard(item)).join("") +
+    "</div>";
+}
+
+function renderBeerCard(item) {
+  const desc = getDesc(item);
+  const abvValue = item.abv || item.ABV || "";
+  const abv = abvValue
+    ? String(abvValue).replace("%", "") + "%"
+    : "";
+
+  const gf = isYes(item["Gluten-Reduced"]);
+  const isNew = isYes(item["New Tap"]);
+  const guidance = item["Guest Guidance"] || "";
+  const tapNumber = getTapNumber(item);
+
+  const cardBody = `
+    <div class="card-top">
+      <div>
+        <p class="name">${escapeHTML(item.Name || "")}</p>
+        <p class="desc">
+          ${escapeHTML(item.Style || "")}
+          ${desc ? " — " + escapeHTML(desc.slice(0, 115)) + (desc.length > 115 ? "…" : "") : ""}
+        </p>
+      </div>
+      ${abv ? `<span class="abv">${escapeHTML(abv)} ABV</span>` : ""}
+    </div>
+
+    <div class="tags">
+      ${isNew ? `<span class="tag new">New</span>` : ""}
+      ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
+      ${guidance ? `<span class="tag">${escapeHTML(guidance)}</span>` : ""}
+    </div>
+
+    <div class="details-hint">Tap to read the full flavor profile</div>
+  `;
+
+  if (activeType === "ontap") {
     return `
-    <div class="card">
-      <div class="card-top">
-        <div>
-          <p class="name">${item.Name || ""}</p>
-          <p class="desc">${item.Style || ""}${desc ? " — " + desc.slice(0, 100) + (desc.length > 100 ? "..." : "") : ""}</p>
+      <div class="card" onclick="openBeerByName('${escapeForAttribute(item.Name)}')">
+        <div class="tap-layout">
+          <div class="tap-number">
+            <small>TAP</small>
+            <strong>${escapeHTML(tapNumber || "—")}</strong>
+          </div>
+          <div>${cardBody}</div>
         </div>
-        ${abv ? `<span class="abv">${abv} ABV</span>` : ""}
       </div>
-      <div class="tags">
-        ${tapNumber ? `<span class="tag new">Tap ${tapNumber}</span>` : ""}
-        ${isNew ? `<span class="tag new">New</span>` : ""}
-        ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
-        ${guidance ? `<span class="tag">${guidance}</span>` : ""}
+    `;
+  }
+
+  return `
+    <div class="card" onclick="openBeerByName('${escapeForAttribute(item.Name)}')">
+      ${cardBody}
+    </div>
+  `;
+}
+
+function openBeerByName(name) {
+  const item = beers.find(b => b.Name === name) ||
+               foods.find(f => f.Name === name);
+
+  if (!item) return;
+
+  const flavor = getFlavorProfile(item);
+  const description = item["Description / ingredients"] || "";
+  const guidance = item["Guest Guidance"] || "";
+  const tapNumber = getTapNumber(item);
+  const abvValue = item.abv || item.ABV || "";
+  const gf = isYes(item["Gluten-Reduced"]);
+  const isNew = isYes(item["New Tap"]);
+
+  document.getElementById("modalContent").innerHTML = `
+    <h2 class="modal-title" id="modalTitle">${escapeHTML(item.Name || "")}</h2>
+    <p class="modal-style">
+      ${escapeHTML(item.Style || "")}
+      ${abvValue ? " · " + escapeHTML(String(abvValue).replace("%", "") + "% ABV") : ""}
+      ${tapNumber ? " · Tap " + escapeHTML(tapNumber) : ""}
+    </p>
+
+    <div class="tags">
+      ${isNew ? `<span class="tag new">New tap</span>` : ""}
+      ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
+    </div>
+
+    <div class="detail-section">
+      <p class="detail-label">Flavor profile</p>
+      <p class="detail-text">${
+        flavor
+          ? escapeHTML(flavor)
+          : "No flavor profile has been added yet."
+      }</p>
+    </div>
+
+    ${description && description !== flavor ? `
+      <div class="detail-section">
+        <p class="detail-label">Description / ingredients</p>
+        <p class="detail-text">${escapeHTML(description)}</p>
       </div>
-    </div>`;
-  }).join("") + '</div>';
+    ` : ""}
+
+    ${guidance ? `
+      <div class="detail-section">
+        <p class="detail-label">Guest guidance</p>
+        <p class="detail-text">${escapeHTML(guidance)}</p>
+      </div>
+    ` : ""}
+  `;
+
+  document.getElementById("modalBackdrop").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(event) {
+  if (event && event.target !== document.getElementById("modalBackdrop")) {
+    return;
+  }
+
+  document.getElementById("modalBackdrop").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function escapeHTML(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function escapeForAttribute(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'");
 }
 
 function renderFlash(content) {
   const pool = beers.filter(b => getDesc(b) || b.Style);
-  if (pool.length === 0) { content.innerHTML = '<div class="empty">No beers loaded yet.</div>'; return; }
+
+  if (pool.length === 0) {
+    content.innerHTML = '<div class="status"><strong>No beers loaded yet.</strong>Add beer information to the spreadsheet first.</div>';
+    return;
+  }
+
   if (flashIndex >= pool.length) flashIndex = 0;
+
   const b = pool[flashIndex];
+
   content.innerHTML = `
     <div class="flash-card" onclick="flashFlipped = !flashFlipped; render();">
       ${!flashFlipped ? `
-        <p style="font-size:18px;font-weight:600;margin:0 0 6px;">${b.Name}</p>
+        <p style="font-size:19px;font-weight:750;margin:0 0 7px;">${escapeHTML(b.Name)}</p>
         <p style="font-size:12.5px;color:#999;">Tap to reveal details</p>
       ` : `
-        <p style="font-size:16px;font-weight:600;margin:0 0 6px;">${b.Name}</p>
-        <p style="font-size:12.5px;color:#666;margin:0 0 8px;">${b.Style || ""} ${b.abv ? "· " + b.abv + "%" : ""}</p>
-        <p style="font-size:12.5px;color:#666;line-height:1.5;">${getDesc(b).slice(0, 160)}</p>
+        <p style="font-size:17px;font-weight:750;margin:0 0 7px;">${escapeHTML(b.Name)}</p>
+        <p style="font-size:12.5px;color:#666;margin:0 0 9px;">
+          ${escapeHTML(b.Style || "")}
+          ${b.abv ? " · " + escapeHTML(String(b.abv).replace("%", "") + "%") : ""}
+        </p>
+        <p style="font-size:12.5px;color:#555;line-height:1.55;">
+          ${escapeHTML(getDesc(b).slice(0, 220))}
+        </p>
       `}
     </div>
+
     <div class="flash-nav">
       <button onclick="flashIndex = (flashIndex - 1 + ${pool.length}) % ${pool.length}; flashFlipped = false; render();">Previous</button>
       <button onclick="flashIndex = (flashIndex + 1) % ${pool.length}; flashFlipped = false; render();">Next</button>
     </div>
+
     <div class="flash-count">${flashIndex + 1} of ${pool.length}</div>
   `;
 }
 
 function newQuiz() {
   const pool = beers.filter(b => getDesc(b) && b.Name);
-  if (pool.length < 4) { quizItem = null; return; }
+
+  if (pool.length < 4) {
+    quizItem = null;
+    return;
+  }
+
   const correct = pool[Math.floor(Math.random() * pool.length)];
   const wrongPool = shuffle(pool.filter(b => b.Name !== correct.Name)).slice(0, 3);
   const options = shuffle([correct, ...wrongPool]);
+
   quizItem = { correct, options, answered: false };
 }
 
 function renderQuiz(content) {
   if (!quizItem) newQuiz();
-  if (!quizItem) { content.innerHTML = '<div class="empty">Not enough beer data loaded yet.</div>'; return; }
-  const desc = getDesc(quizItem.correct).slice(0, 180);
+
+  if (!quizItem) {
+    content.innerHTML = '<div class="status"><strong>Not enough beer data loaded yet.</strong>Add at least four beers with descriptions.</div>';
+    return;
+  }
+
+  const desc = getDesc(quizItem.correct).slice(0, 190);
+
   content.innerHTML = `
     <div class="game-card">
-      <p class="game-question">Which beer matches this description?<br><br>"${desc}"</p>
+      <p class="game-question">
+        Which beer matches this description?<br><br>
+        “${escapeHTML(desc)}”
+      </p>
+
       <div class="game-options">
         ${quizItem.options.map(o => {
           let cls = "game-option";
+
           if (quizItem.answered) {
             if (o.Name === quizItem.correct.Name) cls += " correct";
             else if (o.Name === quizItem.selected) cls += " wrong";
           }
-          return `<div class="${cls}" onclick="answerQuiz('${o.Name.replace(/'/g, "\\'")}')">${o.Name}</div>`;
+
+          return `<div class="${cls}" onclick="answerQuiz('${escapeForAttribute(o.Name)}')">${escapeHTML(o.Name)}</div>`;
         }).join("")}
       </div>
-      ${quizItem.answered ? `<button class="game-next" onclick="newQuiz(); render();">Next question</button>` : ""}
+
+      ${quizItem.answered
+        ? `<button class="game-next" onclick="newQuiz(); render();">Next question</button>`
+        : ""}
     </div>
+
     <div class="game-score">Score: ${quizScore.right} / ${quizScore.total}</div>
   `;
 }
 
 function answerQuiz(name) {
   if (quizItem.answered) return;
+
   quizItem.answered = true;
   quizItem.selected = name;
   quizScore.total++;
-  if (name === quizItem.correct.Name) quizScore.right++;
+
+  if (name === quizItem.correct.Name) {
+    quizScore.right++;
+  }
+
   render();
 }
 
 function newPractice() {
   const pool = beers.filter(b => b["Guest Guidance"] && b.Name);
-  if (pool.length < 4) { practiceItem = null; return; }
+
+  if (pool.length < 4) {
+    practiceItem = null;
+    return;
+  }
+
   const correct = pool[Math.floor(Math.random() * pool.length)];
   const wrongPool = shuffle(pool.filter(b => b.Name !== correct.Name)).slice(0, 3);
   const options = shuffle([correct, ...wrongPool]);
+
   practiceItem = { correct, options, answered: false };
 }
 
 function renderPractice(content) {
   if (!practiceItem) newPractice();
+
   if (!practiceItem) {
-    content.innerHTML = '<div class="empty">Add Guest Guidance to your sheet first — this game uses that column.</div>';
+    content.innerHTML = '<div class="status"><strong>Guest Guidance is needed.</strong>Add guidance to at least four beers in the spreadsheet.</div>';
     return;
   }
+
   content.innerHTML = `
     <div class="game-card">
-      <p class="game-question">A guest says: "${practiceItem.correct["Guest Guidance"]}"<br><br>Which beer do you recommend?</p>
+      <p class="game-question">
+        A guest says: “${escapeHTML(practiceItem.correct["Guest Guidance"])}”
+        <br><br>
+        Which beer do you recommend?
+      </p>
+
       <div class="game-options">
         ${practiceItem.options.map(o => {
           let cls = "game-option";
+
           if (practiceItem.answered) {
             if (o.Name === practiceItem.correct.Name) cls += " correct";
             else if (o.Name === practiceItem.selected) cls += " wrong";
           }
-          return `<div class="${cls}" onclick="answerPractice('${o.Name.replace(/'/g, "\\'")}')">${o.Name}</div>`;
+
+          return `<div class="${cls}" onclick="answerPractice('${escapeForAttribute(o.Name)}')">${escapeHTML(o.Name)}</div>`;
         }).join("")}
       </div>
-      ${practiceItem.answered ? `<button class="game-next" onclick="newPractice(); render();">Next</button>` : ""}
+
+      ${practiceItem.answered
+        ? `<button class="game-next" onclick="newPractice(); render();">Next</button>`
+        : ""}
     </div>
+
     <div class="game-score">Score: ${practiceScore.right} / ${practiceScore.total}</div>
   `;
 }
 
 function answerPractice(name) {
   if (practiceItem.answered) return;
+
   practiceItem.answered = true;
   practiceItem.selected = name;
   practiceScore.total++;
-  if (name === practiceItem.correct.Name) practiceScore.right++;
+
+  if (name === practiceItem.correct.Name) {
+    practiceScore.right++;
+  }
+
   render();
 }
 
 document.getElementById("search").addEventListener("input", render);
+
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -366,6 +1159,21 @@ document.querySelectorAll(".tab").forEach(tab => {
     activeType = tab.dataset.type;
     render();
   });
+});
+
+document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    activeFilter = button.dataset.filter;
+    render();
+  });
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeModal();
+  }
 });
 
 loadData();
