@@ -27,6 +27,7 @@
   .tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
   .tag { font-size: 10.5px; font-weight: 500; background: #f2f2f2; color: #555; padding: 4px 9px; border-radius: 6px; }
   .tag.gf { background: #e9f5ec; color: #1e7a3d; }
+  .tag.new { background: #111; color: #fff; }
   .empty { text-align: center; color: #999; padding: 60px 16px; font-size: 13.5px; }
   .game-card { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 28px 18px; margin: 14px; text-align: center; }
   .game-question { font-size: 14.5px; color: #222; margin-bottom: 22px; line-height: 1.6; }
@@ -44,6 +45,13 @@
   .flash-nav button { padding: 9px 18px; border: 1px solid #e0e0e0; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s; }
   .flash-nav button:hover { border-color: #111; }
   .flash-count { text-align: center; font-size: 11.5px; color: #999; margin-top: 10px; font-weight: 500; }
+  .new-banner { margin: 14px 14px 0; background: #111; border-radius: 14px; padding: 16px; color: #fff; position: relative; overflow: hidden; min-height: 76px; }
+  .new-banner-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #999; margin: 0 0 6px; }
+  .new-banner-name { font-size: 16px; font-weight: 600; margin: 0 0 3px; }
+  .new-banner-desc { font-size: 12px; color: #bbb; margin: 0; line-height: 1.4; }
+  .new-banner-dots { display: flex; gap: 5px; margin-top: 10px; }
+  .new-banner-dot { width: 5px; height: 5px; border-radius: 50%; background: #444; }
+  .new-banner-dot.active { background: #fff; }
 </style>
 </head>
 <body>
@@ -66,6 +74,7 @@
   <input type="text" id="search" placeholder="Search beer or food item">
   <div class="tabs">
     <div class="tab active" data-type="beer">Beers</div>
+    <div class="tab" data-type="ontap">On Tap</div>
     <div class="tab" data-type="food">Food</div>
     <div class="tab" data-type="flash">Flashcards</div>
     <div class="tab" data-type="quiz">Quiz</div>
@@ -88,6 +97,8 @@ let quizItem = null;
 let quizScore = { right: 0, total: 0 };
 let practiceItem = null;
 let practiceScore = { right: 0, total: 0 };
+let newTapIndex = 0;
+let newTapTimer = null;
 
 function parseCSV(text) {
   const rows = [];
@@ -125,10 +136,15 @@ async function loadData() {
     foods = parseCSV(foodText);
   }
   render();
+  startNewTapRotation();
 }
 
 function getDesc(item) {
   return item["Description / ingredients"] || item["Flavor Prodfile"] || "";
+}
+
+function isYes(val) {
+  return (val || "").toLowerCase().trim() === "yes";
 }
 
 function shuffle(arr) {
@@ -142,7 +158,7 @@ function shuffle(arr) {
 
 function render() {
   const content = document.getElementById("content");
-  if (activeType === "beer" || activeType === "food") {
+  if (activeType === "beer" || activeType === "food" || activeType === "ontap") {
     renderList(content);
   } else if (activeType === "flash") {
     renderFlash(content);
@@ -153,21 +169,56 @@ function render() {
   }
 }
 
+function renderNewTapBanner() {
+  const newBeers = beers.filter(b => isYes(b["New Tap"]));
+  if (newBeers.length === 0) return "";
+  if (newTapIndex >= newBeers.length) newTapIndex = 0;
+  const b = newBeers[newTapIndex];
+  const desc = getDesc(b).slice(0, 90);
+  return `
+    <div class="new-banner">
+      <p class="new-banner-label">NEWLY TAPPED</p>
+      <p class="new-banner-name">${b.Name}</p>
+      <p class="new-banner-desc">${b.Style || ""}${desc ? " — " + desc : ""}</p>
+      <div class="new-banner-dots">
+        ${newBeers.map((_, i) => `<div class="new-banner-dot${i === newTapIndex ? ' active' : ''}"></div>`).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function startNewTapRotation() {
+  if (newTapTimer) clearInterval(newTapTimer);
+  newTapTimer = setInterval(() => {
+    const newBeers = beers.filter(b => isYes(b["New Tap"]));
+    if (newBeers.length === 0) return;
+    newTapIndex = (newTapIndex + 1) % newBeers.length;
+    if (activeType === "beer" || activeType === "ontap") render();
+  }, 4000);
+}
+
 function renderList(content) {
   const query = document.getElementById("search").value.toLowerCase();
-  const source = activeType === "beer" ? beers : foods;
+  let source = activeType === "food" ? foods : beers;
+  if (activeType === "ontap") {
+    source = source.filter(b => isYes(b["On Tap"]));
+  }
   const filtered = source.filter(item =>
     (item.Name || "").toLowerCase().includes(query) ||
     (item.Style || "").toLowerCase().includes(query)
   );
+
+  const banner = (activeType === "beer" || activeType === "ontap") ? renderNewTapBanner() : "";
+
   if (filtered.length === 0) {
-    content.innerHTML = '<div class="empty">Nothing matches yet.</div>';
+    content.innerHTML = banner + '<div class="empty">Nothing matches yet.</div>';
     return;
   }
-  content.innerHTML = '<div class="list">' + filtered.map(item => {
+  content.innerHTML = banner + '<div class="list">' + filtered.map(item => {
     const desc = getDesc(item);
     const abv = item.abv ? item.abv + "%" : "";
-    const gf = (item["Gluten-Reduced"] || "").toLowerCase() === "yes";
+    const gf = isYes(item["Gluten-Reduced"]);
+    const isNew = isYes(item["New Tap"]);
     const guidance = item["Guest Guidance"] || "";
     return `
     <div class="card">
@@ -179,6 +230,7 @@ function renderList(content) {
         ${abv ? `<span class="abv">${abv} ABV</span>` : ""}
       </div>
       <div class="tags">
+        ${isNew ? `<span class="tag new">New</span>` : ""}
         ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
         ${guidance ? `<span class="tag">${guidance}</span>` : ""}
       </div>
