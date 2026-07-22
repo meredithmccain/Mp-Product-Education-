@@ -144,7 +144,7 @@ function getDesc(item) {
 }
 
 function isYes(val) {
-  return (val || "").toLowerCase().trim() === "yes";
+  return (val || "").toLowerCase().trim().startsWith("yes");
 }
 
 function shuffle(arr) {
