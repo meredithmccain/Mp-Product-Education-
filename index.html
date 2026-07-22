@@ -201,8 +201,14 @@ function renderList(content) {
   const query = document.getElementById("search").value.toLowerCase();
   let source = activeType === "food" ? foods : beers;
   if (activeType === "ontap") {
-    source = source.filter(b => isYes(b["On Tap"]));
-  }
+  source = source
+    .filter(b => isYes(b["On Tap"]))
+    .sort((a, b) => {
+      const tapA = Number((a["On Tap"] || "").match(/\d+/)?.[0] || 999);
+      const tapB = Number((b["On Tap"] || "").match(/\d+/)?.[0] || 999);
+      return tapA - tapB;
+    });
+}
   const filtered = source.filter(item =>
     (item.Name || "").toLowerCase().includes(query) ||
     (item.Style || "").toLowerCase().includes(query)
@@ -221,6 +227,8 @@ function renderList(content) {
     const isNew = isYes(item["New Tap"]);
     const guidance = item["Guest Guidance"] || "";
     return `
+    const guidance = item["Guest Guidance"] || "";
+    const tapNumber = (item["On Tap"] || "").match(/\d+/)?.[0] || "";
     <div class="card">
       <div class="card-top">
         <div>
@@ -230,7 +238,7 @@ function renderList(content) {
         ${abv ? `<span class="abv">${abv} ABV</span>` : ""}
       </div>
       <div class="tags">
-        ${isNew ? `<span class="tag new">New</span>` : ""}
+        ${tapNumber ? `<span class="tag new">Tap ${tapNumber}</span>` : ""}${isNew ? `<span class="tag new">New</span>` : ""}
         ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
         ${guidance ? `<span class="tag">${guidance}</span>` : ""}
       </div>
