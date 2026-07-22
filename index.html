@@ -201,14 +201,16 @@ function renderList(content) {
   const query = document.getElementById("search").value.toLowerCase();
   let source = activeType === "food" ? foods : beers;
   if (activeType === "ontap") {
-  source = source
-    .filter(b => isYes(b["On Tap"]))
-    .sort((a, b) => {
-      const tapA = Number((a["On Tap"] || "").match(/\d+/)?.[0] || 999);
-      const tapB = Number((b["On Tap"] || "").match(/\d+/)?.[0] || 999);
-      return tapA - tapB;
-    });
-}
+    source = source
+      .filter(b => isYes(b["On Tap"]))
+      .sort((a, b) => {
+        const matchA = (a["On Tap"] || "").match(/\d+/);
+        const matchB = (b["On Tap"] || "").match(/\d+/);
+        const tapA = matchA ? Number(matchA[0]) : 999;
+        const tapB = matchB ? Number(matchB[0]) : 999;
+        return tapA - tapB;
+      });
+  }
   const filtered = source.filter(item =>
     (item.Name || "").toLowerCase().includes(query) ||
     (item.Style || "").toLowerCase().includes(query)
@@ -226,11 +228,11 @@ function renderList(content) {
     const gf = isYes(item["Gluten-Reduced"]);
     const isNew = isYes(item["New Tap"]);
     const guidance = item["Guest Guidance"] || "";
-const tapNumberMatch = (item["On Tap"] || "").match(/\d+/);
-const tapNumber = tapNumberMatch ? tapNumberMatch[0] : "";
+    const tapNumberMatch = (item["On Tap"] || "").match(/\d+/);
+    const tapNumber = tapNumberMatch ? tapNumberMatch[0] : "";
 
-return `
-<div class="card">
+    return `
+    <div class="card">
       <div class="card-top">
         <div>
           <p class="name">${item.Name || ""}</p>
@@ -239,7 +241,8 @@ return `
         ${abv ? `<span class="abv">${abv} ABV</span>` : ""}
       </div>
       <div class="tags">
-        ${tapNumber ? `<span class="tag new">Tap ${tapNumber}</span>` : ""}${isNew ? `<span class="tag new">New</span>` : ""}
+        ${tapNumber ? `<span class="tag new">Tap ${tapNumber}</span>` : ""}
+        ${isNew ? `<span class="tag new">New</span>` : ""}
         ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
         ${guidance ? `<span class="tag">${guidance}</span>` : ""}
       </div>
