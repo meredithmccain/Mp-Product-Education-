@@ -226,10 +226,11 @@ function renderList(content) {
     const gf = isYes(item["Gluten-Reduced"]);
     const isNew = isYes(item["New Tap"]);
     const guidance = item["Guest Guidance"] || "";
-    return `
-    const guidance = item["Guest Guidance"] || "";
-    const tapNumber = (item["On Tap"] || "").match(/\d+/)?.[0] || "";
-    <div class="card">
+const tapNumberMatch = (item["On Tap"] || "").match(/\d+/);
+const tapNumber = tapNumberMatch ? tapNumberMatch[0] : "";
+
+return `
+<div class="card">
       <div class="card-top">
         <div>
           <p class="name">${item.Name || ""}</p>
