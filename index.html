@@ -3,40 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tap List Guide</title>
+<title>Manhattan Project Tap List Guide</title>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, sans-serif; margin: 0; background: #f7f6f2; color: #222; }
-  header { padding: 16px; background: #fff; border-bottom: 1px solid #e5e3dc; position: sticky; top: 0; }
-  h1 { font-size: 18px; margin: 0 0 10px; }
-  input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
-  .tabs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; }
-  .tab { padding: 6px 12px; border-radius: 999px; border: 1px solid #ccc; font-size: 13px; white-space: nowrap; cursor: pointer; }
-  .tab.active { background: #222; color: #fff; border-color: #222; }
-  .list { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-  .card { background: #fff; border: 1px solid #e5e3dc; border-radius: 12px; padding: 12px; }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-  .name { font-weight: 600; font-size: 15px; margin: 0 0 4px; }
-  .desc { font-size: 13px; color: #555; margin: 0; }
-  .abv { font-size: 12px; background: #fdeed2; color: #7a4b06; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
-  .tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-  .tag { font-size: 11px; background: #f0efe9; color: #555; padding: 3px 8px; border-radius: 6px; }
-  .tag.gf { background: #e3f3e6; color: #2b6b39; }
-  .empty { text-align: center; color: #888; padding: 40px 16px; font-size: 14px; }
+  body { font-family: -apple-system, "Helvetica Neue", sans-serif; margin: 0; background: #fafafa; color: #111; -webkit-font-smoothing: antialiased; }
+  header { padding: 22px 16px 16px; background: #111; border-bottom: 1px solid #111; position: sticky; top: 0; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .brand svg { flex-shrink: 0; }
+  .brand-text h1 { font-size: 17px; font-weight: 700; margin: 0; color: #fff; letter-spacing: 0.02em; }
+  .brand-text p { font-size: 10px; font-weight: 500; margin: 2px 0 0; color: #999; letter-spacing: 0.12em; }
+  input[type="text"] { width: 100%; padding: 11px 14px; border: 1px solid #333; border-radius: 10px; font-size: 14px; background: #1c1c1c; color: #fff; outline: none; transition: border-color 0.15s; }
+  input[type="text"]::placeholder { color: #777; }
+  input[type="text"]:focus { border-color: #fff; }
+  .tabs { display: flex; gap: 6px; margin-top: 12px; overflow-x: auto; padding-bottom: 2px; }
+  .tab { padding: 7px 14px; border-radius: 999px; border: 1px solid #333; font-size: 12.5px; font-weight: 500; white-space: nowrap; cursor: pointer; color: #ccc; transition: all 0.15s; }
+  .tab.active { background: #fff; color: #111; border-color: #fff; }
+  .list { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .card { background: #fff; border: 1px solid #ececec; border-radius: 14px; padding: 14px 16px; transition: border-color 0.15s; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .name { font-weight: 600; font-size: 15px; margin: 0 0 3px; letter-spacing: -0.01em; }
+  .desc { font-size: 12.5px; color: #777; margin: 0; line-height: 1.45; }
+  .abv { font-size: 11px; font-weight: 600; background: #111; color: #fff; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .tag { font-size: 10.5px; font-weight: 500; background: #f2f2f2; color: #555; padding: 4px 9px; border-radius: 6px; }
+  .tag.gf { background: #e9f5ec; color: #1e7a3d; }
+  .empty { text-align: center; color: #999; padding: 60px 16px; font-size: 13.5px; }
+  .game-card { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 28px 18px; margin: 14px; text-align: center; }
+  .game-question { font-size: 14.5px; color: #222; margin-bottom: 22px; line-height: 1.6; }
+  .game-options { display: flex; flex-direction: column; gap: 8px; }
+  .game-option { padding: 13px 14px; border: 1px solid #e0e0e0; border-radius: 11px; background: #fff; font-size: 13.5px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.15s; }
+  .game-option:hover { border-color: #bbb; }
+  .game-option.correct { background: #e9f5ec; border-color: #1e7a3d; color: #1e7a3d; }
+  .game-option.wrong { background: #fbeaea; border-color: #b33; color: #b33; }
+  .game-next { margin-top: 18px; padding: 11px 22px; background: #111; color: #fff; border: none; border-radius: 999px; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+  .game-next:hover { background: #333; }
+  .game-score { text-align: center; font-size: 12px; color: #999; margin: 10px 16px 0; font-weight: 500; }
+  .flash-card { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 36px 18px; margin: 14px; text-align: center; min-height: 140px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: border-color 0.15s; }
+  .flash-card:hover { border-color: #ccc; }
+  .flash-nav { display: flex; justify-content: space-between; padding: 0 16px; margin-top: 12px; }
+  .flash-nav button { padding: 9px 18px; border: 1px solid #e0e0e0; border-radius: 999px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s; }
+  .flash-nav button:hover { border-color: #111; }
+  .flash-count { text-align: center; font-size: 11.5px; color: #999; margin-top: 10px; font-weight: 500; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Tap List Guide</h1>
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(0 50 50)"/>
+      <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(60 50 50)"/>
+      <ellipse cx="50" cy="50" rx="46" ry="18" fill="none" stroke="#fff" stroke-width="3" transform="rotate(120 50 50)"/>
+      <rect x="43" y="32" width="14" height="40" rx="2" fill="#fff"/>
+      <rect x="46" y="22" width="8" height="12" fill="#fff"/>
+      <rect x="47" y="16" width="6" height="8" rx="1" fill="#fff"/>
+    </svg>
+    <div class="brand-text">
+      <h1>MANHATTAN PROJECT</h1>
+      <p>BEER COMPANY</p>
+    </div>
+  </div>
   <input type="text" id="search" placeholder="Search beer or food item">
   <div class="tabs">
     <div class="tab active" data-type="beer">Beers</div>
     <div class="tab" data-type="food">Food</div>
+    <div class="tab" data-type="flash">Flashcards</div>
+    <div class="tab" data-type="quiz">Quiz</div>
+    <div class="tab" data-type="practice">Practice</div>
   </div>
 </header>
 
-<div class="list" id="list"></div>
+<div id="content"></div>
 
 <script>
 const BEER_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfvDNoqxHQCc7PBCm-xetbdDiAfyfi3ECVbnRAfoCYJmdfSxFuamdGJ6THg97ErXp3hFCLG1IBcZsH/pub?gid=0&single=true&output=csv";
@@ -45,6 +82,12 @@ const FOOD_CSV_URL = "PASTE_YOUR_FOOD_CSV_LINK_HERE";
 let beers = [];
 let foods = [];
 let activeType = "beer";
+let flashIndex = 0;
+let flashFlipped = false;
+let quizItem = null;
+let quizScore = { right: 0, total: 0 };
+let practiceItem = null;
+let practiceScore = { right: 0, total: 0 };
 
 function parseCSV(text) {
   const rows = [];
@@ -84,22 +127,45 @@ async function loadData() {
   render();
 }
 
+function getDesc(item) {
+  return item["Description / ingredients"] || item["Flavor Prodfile"] || "";
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function render() {
+  const content = document.getElementById("content");
+  if (activeType === "beer" || activeType === "food") {
+    renderList(content);
+  } else if (activeType === "flash") {
+    renderFlash(content);
+  } else if (activeType === "quiz") {
+    renderQuiz(content);
+  } else if (activeType === "practice") {
+    renderPractice(content);
+  }
+}
+
+function renderList(content) {
   const query = document.getElementById("search").value.toLowerCase();
   const source = activeType === "beer" ? beers : foods;
   const filtered = source.filter(item =>
     (item.Name || "").toLowerCase().includes(query) ||
     (item.Style || "").toLowerCase().includes(query)
   );
-
-  const list = document.getElementById("list");
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty">Nothing matches yet.</div>';
+    content.innerHTML = '<div class="empty">Nothing matches yet.</div>';
     return;
   }
-
-  list.innerHTML = filtered.map(item => {
-    const desc = item["Description / ingredients"] || item["Flavor Prodfile"] || "";
+  content.innerHTML = '<div class="list">' + filtered.map(item => {
+    const desc = getDesc(item);
     const abv = item.abv ? item.abv + "%" : "";
     const gf = (item["Gluten-Reduced"] || "").toLowerCase() === "yes";
     const guidance = item["Guest Guidance"] || "";
@@ -116,9 +182,116 @@ function render() {
         ${gf ? `<span class="tag gf">Gluten-reduced</span>` : ""}
         ${guidance ? `<span class="tag">${guidance}</span>` : ""}
       </div>
+    </div>`;
+  }).join("") + '</div>';
+}
+
+function renderFlash(content) {
+  const pool = beers.filter(b => getDesc(b) || b.Style);
+  if (pool.length === 0) { content.innerHTML = '<div class="empty">No beers loaded yet.</div>'; return; }
+  if (flashIndex >= pool.length) flashIndex = 0;
+  const b = pool[flashIndex];
+  content.innerHTML = `
+    <div class="flash-card" onclick="flashFlipped = !flashFlipped; render();">
+      ${!flashFlipped ? `
+        <p style="font-size:18px;font-weight:600;margin:0 0 6px;">${b.Name}</p>
+        <p style="font-size:12.5px;color:#999;">Tap to reveal details</p>
+      ` : `
+        <p style="font-size:16px;font-weight:600;margin:0 0 6px;">${b.Name}</p>
+        <p style="font-size:12.5px;color:#666;margin:0 0 8px;">${b.Style || ""} ${b.abv ? "· " + b.abv + "%" : ""}</p>
+        <p style="font-size:12.5px;color:#666;line-height:1.5;">${getDesc(b).slice(0, 160)}</p>
+      `}
     </div>
+    <div class="flash-nav">
+      <button onclick="flashIndex = (flashIndex - 1 + ${pool.length}) % ${pool.length}; flashFlipped = false; render();">Previous</button>
+      <button onclick="flashIndex = (flashIndex + 1) % ${pool.length}; flashFlipped = false; render();">Next</button>
+    </div>
+    <div class="flash-count">${flashIndex + 1} of ${pool.length}</div>
   `;
-  }).join("");
+}
+
+function newQuiz() {
+  const pool = beers.filter(b => getDesc(b) && b.Name);
+  if (pool.length < 4) { quizItem = null; return; }
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  const wrongPool = shuffle(pool.filter(b => b.Name !== correct.Name)).slice(0, 3);
+  const options = shuffle([correct, ...wrongPool]);
+  quizItem = { correct, options, answered: false };
+}
+
+function renderQuiz(content) {
+  if (!quizItem) newQuiz();
+  if (!quizItem) { content.innerHTML = '<div class="empty">Not enough beer data loaded yet.</div>'; return; }
+  const desc = getDesc(quizItem.correct).slice(0, 180);
+  content.innerHTML = `
+    <div class="game-card">
+      <p class="game-question">Which beer matches this description?<br><br>"${desc}"</p>
+      <div class="game-options">
+        ${quizItem.options.map(o => {
+          let cls = "game-option";
+          if (quizItem.answered) {
+            if (o.Name === quizItem.correct.Name) cls += " correct";
+            else if (o.Name === quizItem.selected) cls += " wrong";
+          }
+          return `<div class="${cls}" onclick="answerQuiz('${o.Name.replace(/'/g, "\\'")}')">${o.Name}</div>`;
+        }).join("")}
+      </div>
+      ${quizItem.answered ? `<button class="game-next" onclick="newQuiz(); render();">Next question</button>` : ""}
+    </div>
+    <div class="game-score">Score: ${quizScore.right} / ${quizScore.total}</div>
+  `;
+}
+
+function answerQuiz(name) {
+  if (quizItem.answered) return;
+  quizItem.answered = true;
+  quizItem.selected = name;
+  quizScore.total++;
+  if (name === quizItem.correct.Name) quizScore.right++;
+  render();
+}
+
+function newPractice() {
+  const pool = beers.filter(b => b["Guest Guidance"] && b.Name);
+  if (pool.length < 4) { practiceItem = null; return; }
+  const correct = pool[Math.floor(Math.random() * pool.length)];
+  const wrongPool = shuffle(pool.filter(b => b.Name !== correct.Name)).slice(0, 3);
+  const options = shuffle([correct, ...wrongPool]);
+  practiceItem = { correct, options, answered: false };
+}
+
+function renderPractice(content) {
+  if (!practiceItem) newPractice();
+  if (!practiceItem) {
+    content.innerHTML = '<div class="empty">Add Guest Guidance to your sheet first — this game uses that column.</div>';
+    return;
+  }
+  content.innerHTML = `
+    <div class="game-card">
+      <p class="game-question">A guest says: "${practiceItem.correct["Guest Guidance"]}"<br><br>Which beer do you recommend?</p>
+      <div class="game-options">
+        ${practiceItem.options.map(o => {
+          let cls = "game-option";
+          if (practiceItem.answered) {
+            if (o.Name === practiceItem.correct.Name) cls += " correct";
+            else if (o.Name === practiceItem.selected) cls += " wrong";
+          }
+          return `<div class="${cls}" onclick="answerPractice('${o.Name.replace(/'/g, "\\'")}')">${o.Name}</div>`;
+        }).join("")}
+      </div>
+      ${practiceItem.answered ? `<button class="game-next" onclick="newPractice(); render();">Next</button>` : ""}
+    </div>
+    <div class="game-score">Score: ${practiceScore.right} / ${practiceScore.total}</div>
+  `;
+}
+
+function answerPractice(name) {
+  if (practiceItem.answered) return;
+  practiceItem.answered = true;
+  practiceItem.selected = name;
+  practiceScore.total++;
+  if (name === practiceItem.correct.Name) practiceScore.right++;
+  render();
 }
 
 document.getElementById("search").addEventListener("input", render);
